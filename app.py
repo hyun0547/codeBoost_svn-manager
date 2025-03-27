@@ -35,8 +35,7 @@ def list_svn_repositories(repo_base_path="/srv/svn/repository"):
     try:
         repos = [{"name": d} for d in os.listdir(repo_base_path)
                  if os.path.isdir(os.path.join(repo_base_path, d))]
-
-        return {repos}, 200
+        return repos, 200
     except FileNotFoundError:
         return {"error": f"경로 없음: {repo_base_path}"}, 404
     except PermissionError:
@@ -59,8 +58,8 @@ def create_repo():
 
 @app.route('/repo_list', methods=['GET'])
 def list_repos():
-    repo_base_path = "/srv/svn/repository"
-    return jsonify(list_svn_repositories(repo_base_path))
+    repo_base_path = "/srv/svn/repository"  # 실제 경로를 지정
+    return jsonify(list_svn_repositories(repo_base_path)[0])
 
 
 if __name__ == "__main__":
