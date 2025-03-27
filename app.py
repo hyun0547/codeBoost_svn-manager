@@ -36,7 +36,7 @@ def list_svn_repositories(repo_base_path="/srv/svn/repository"):
         repos = [{"name": d} for d in os.listdir(repo_base_path)
                  if os.path.isdir(os.path.join(repo_base_path, d))]
 
-        return {"repositories": repos}, 200
+        return {repos}, 200
     except FileNotFoundError:
         return {"error": f"경로 없음: {repo_base_path}"}, 404
     except PermissionError:
