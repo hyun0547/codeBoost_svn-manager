@@ -33,8 +33,9 @@ def create_svn_repository(repo_name, repo_base_path, config_path):
 
 def list_svn_repositories(repo_base_path="/srv/svn/repository"):
     try:
-        # 디렉터리 내 존재하는 모든 SVN 리포지토리 반환
-        repos = [d for d in os.listdir(repo_base_path) if os.path.isdir(os.path.join(repo_base_path, d))]
+        repos = [{"name": d} for d in os.listdir(repo_base_path)
+                 if os.path.isdir(os.path.join(repo_base_path, d))]
+
         return {"repositories": repos}, 200
     except FileNotFoundError:
         return {"error": f"경로 없음: {repo_base_path}"}, 404
