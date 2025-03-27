@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 import os
 import subprocess
-import sys
 
 app = Flask(__name__)
 
@@ -32,6 +31,17 @@ def create_svn_repository(repo_name, repo_base_path, config_path):
         return {"error": f"오류 발생: {e}"}, 500
 
 
+def list_svn_repositories(repo_base_path="/srv/svn/repository"):
+    try:
+        # 디렉터리 내 존재하는 모든 SVN 리포지토리 반환
+        repos = [d for d in os.listdir(repo_base_path) if os.path.isdir(os.path.join(repo_base_path, d))]
+        return {"repositories": repos}, 200
+    except FileNotFoundError:
+        return {"error": f"경로 없음: {repo_base_path}"}, 404
+    except PermissionError:
+        return {"error": f"권한 거부됨: {repo_base_path}"}, 403
+
+
 @app.route('/create_repo', methods=['POST'])
 def create_repo():
     data = request.get_json()
@@ -44,6 +54,12 @@ def create_repo():
     config_path = "/srv/svn/common/config/svnserve.conf"
 
     return jsonify(create_svn_repository(repo_name, repo_base_path, config_path))
+
+
+@app.route('/repo_list', methods=['GET'])
+def list_repos():
+    repo_base_path = "/srv/svn/repository"
+    return jsonify(list_svn_repositories(repo_base_path))
 
 
 if __name__ == "__main__":
