@@ -19,18 +19,16 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      # 3️⃣ Docker 이미지 빌드
       - name: Build Docker Image
         run: |
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/code-boost_svn-manager:latest .
 
-      # 4️⃣ Docker Hub에 Push
       - name: Push Docker Image
         run: |
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/code-boost_svn-manager:latest
 
   deploy:
-    needs: build
+    needs: build-and-push
     runs-on: ubuntu-24.04
 
     steps:
