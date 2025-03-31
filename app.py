@@ -30,10 +30,15 @@ def create_svn_repository(repo_name, repo_base_path, config_path):
     except subprocess.CalledProcessError as e:
         return make_response(jsonify({"error": f"오류 발생: {e}"}), 500)
 
+def natural_sort_key(entry):
+    return [int(text) if text.isdigit() else text.lower() for text in re.split(r'(\d+)', entry["name"])]
+
 def list_svn_repositories(repo_base_path="/srv/svn/repository", page_num=1, page_size=10):
     try:
-        repos = sorted([{"name": d} for d in os.listdir(repo_base_path)
-                        if os.path.isdir(os.path.join(repo_base_path, d))], key=lambda x: x["name"])
+        repos = sorted(
+            [{"name": d} for d in os.listdir(repo_base_path) if os.path.isdir(os.path.join(repo_base_path, d))],
+            key=natural_sort_key  # 자연 정렬 적용
+        )
 
         start_idx = (page_num - 1) * page_size
         end_idx = start_idx + page_size
