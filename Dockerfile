@@ -2,6 +2,7 @@ FROM python:3.9-slim AS base
 
 RUN apt-get update && apt-get install -y \
     subversion \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
