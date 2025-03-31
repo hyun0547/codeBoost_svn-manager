@@ -39,11 +39,11 @@ def list_svn_repositories(repo_base_path="/srv/svn/repository", page_num=1, page
         end_idx = start_idx + page_size
         paged_repos = repos[start_idx:end_idx]
 
-        return paged_repos, 200
+        return make_response(paged_repos, 200)
     except FileNotFoundError:
-        return {"error": f"경로 없음: {repo_base_path}"}, 404
+        return make_response(jsonify({"error": f"경로 없음: {repo_base_path}"}), 404)
     except PermissionError:
-        return {"error": f"권한 거부됨: {repo_base_path}"}, 403
+        return make_response(jsonify({"error": f"권한 거부됨: {repo_base_path}"}), 403)
 
 @app.route('/create_repo', methods=['POST'])
 def create_repo():
@@ -66,7 +66,7 @@ def list_repos():
     page_size = data.get("pageSize", 10)
     repo_base_path = "/srv/svn/repository"  # 실제 경로를 지정
 
-    return jsonify(list_svn_repositories(repo_base_path, page_num, page_size)[0])
+    return list_svn_repositories(repo_base_path, page_num, page_size)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
