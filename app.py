@@ -1,8 +1,19 @@
 from flask import Flask, request, jsonify, make_response
+import logging
+import sys
 import os
 import subprocess
 
 app = Flask(__name__)
+
+# 로그 레벨과 출력 설정
+logging.basicConfig(
+    level=logging.DEBUG,  # 필요에 따라 INFO, WARNING, ERROR로 조절
+    format='[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)  # 콘솔 출력
+    ]
+)
 
 def create_svn_repository(repo_name, repo_base_path, config_path):
     # 리포지토리 경로 설정
@@ -50,6 +61,7 @@ def list_svn_repositories(repo_base_path="/srv/svn/repository", page_num=1, page
 @app.route('/repo_create', methods=['POST'])
 def create_repo():
     data = request.get_json()
+    print('repoName' in data)
 
     if 'repoName' not in data:
         return make_response(jsonify({"error": "리포지토리 이름이 필요합니다."}), 400)
