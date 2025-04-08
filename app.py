@@ -83,4 +83,4 @@ def list_repos():
     return list_svn_repositories(repo_base_path, page_num, page_size)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
