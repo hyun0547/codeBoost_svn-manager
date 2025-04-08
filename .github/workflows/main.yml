@@ -39,4 +39,5 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            docker compose -f ~/workspace/codeBoost/docker/docker-compose.yml up -d --pull always --force-recreate svn
+            docker pull hyeonsuson/code-boost_svn-manager:latest
+            docker compose -f ~/workspace/codeBoost/docker/docker-compose.yml up -d --force-recreate svn-manager
