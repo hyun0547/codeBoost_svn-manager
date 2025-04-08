@@ -47,7 +47,7 @@ def list_svn_repositories(repo_base_path="/srv/svn/repository", page_num=1, page
     except PermissionError:
         return make_response(jsonify({"error": f"권한 거부됨: {repo_base_path}"}), 403)
 
-@app.route('/create_repo', methods=['POST'])
+@app.route('/repo_create', methods=['POST'])
 def create_repo():
     data = request.get_json()
 
