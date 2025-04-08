@@ -51,10 +51,10 @@ def list_svn_repositories(repo_base_path="/srv/svn/repository", page_num=1, page
 def create_repo():
     data = request.get_json()
 
-    if 'name' not in data:
+    if 'repoName' not in data:
         return make_response(jsonify({"error": "리포지토리 이름이 필요합니다."}), 400)
 
-    repo_name = data['name']
+    repo_name = data['repoName']
     repo_base_path = "/srv/svn/repository"
     config_path = "/srv/svn/common/config/svnserve.conf"
 
