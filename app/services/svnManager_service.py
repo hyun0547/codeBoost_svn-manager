@@ -4,12 +4,17 @@ import logging
 from app.exceptions import ApiException
 from app.utils.response_util import success_response
 
-def create_svn_repository(repo_name, repo_base_path="/srv/svn/repository", config_path="/srv/svn/common/config/svnserve.conf"):
+def create_svn_repository(repo_name, repo_base_path="/srv/svn/repository"):
     if not repo_name:
         raise ApiException(400, "ERROR", "리포지토리 이름이 필요합니다.")
 
     repo_path = os.path.join(repo_base_path, repo_name)
-    conf_file = os.path.join(repo_path, 'conf', 'svnserve.conf')
+
+    serve_conf_file = os.path.join(repo_path, 'conf', 'svnserve.conf')
+    serve_config_path="/srv/svn/common/config/svnserve.conf"
+
+    passwd_conf_file = os.path.join(repo_path, 'conf', 'passwd')
+    passwd_config_path="/srv/svn/common/config/passwd"
 
     if os.path.isdir(repo_path):
         raise ApiException(400, "ERROR", f"이미 존재하는 리포지토리: {repo_path}")
@@ -17,10 +22,15 @@ def create_svn_repository(repo_name, repo_base_path="/srv/svn/repository", confi
     try:
         subprocess.run(['svnadmin', 'create', repo_path], check=True)
 
-        if os.path.isfile(conf_file):
-            os.remove(conf_file)
+        if os.path.isfile(serve_conf_file):
+            os.remove(serve_conf_file)
 
-        os.symlink(config_path, conf_file)
+        os.symlink(serve_config_path, serve_conf_file)
+
+        if os.path.isfile(passwd_conf_file):
+            os.remove(passwd_conf_file)
+
+        os.symlink(passwd_config_path, passwd_conf_file)
 
         logging.info(f"SVN 리포지토리 생성 성공: {repo_path}")
         return success_response(message=f"SVN 리포지토리 생성 완료: {repo_path}")
