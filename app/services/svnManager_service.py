@@ -37,6 +37,7 @@ def list_svn_repositories(repo_base_path="/srv/svn/repository", page_num=1, page
         )
 
         start_idx = (page_num - 1) * page_size
+        end_idx = start_idx + page_size
         paged_repos = repos[start_idx:end_idx]
 
         return success_response(data=paged_repos)
