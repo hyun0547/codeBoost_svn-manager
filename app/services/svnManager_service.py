@@ -32,8 +32,8 @@ def create_svn_repository(repo_name, repo_base_path="/srv/svn/repository", confi
 def list_svn_repositories(repo_base_path="/srv/svn/repository", page_num=1, page_size=10):
     try:
         repos = sorted(
-            [{"name": d} for d in os.listdir(repo_base_path) if os.path.isdir(os.path.join(repo_base_path, d))],
-            key=lambda x: x["name"]
+            [{"repo_name": d} for d in os.listdir(repo_base_path) if os.path.isdir(os.path.join(repo_base_path, d))],
+            key=lambda x: x["repo_name"]
         )
 
         start_idx = (page_num - 1) * page_size
