@@ -12,4 +12,4 @@ def create_repo():
 @bp.route('/repo_list', methods=['POST'])
 def list_repo():
     data = request.get_json()
-    return list_svn_repositories(data.get("pageNum", 1), data.get("pageSize", 10))
+    return list_svn_repositories(page_num=data.get("pageNum", 1), page_size=data.get("pageSize", 10))
